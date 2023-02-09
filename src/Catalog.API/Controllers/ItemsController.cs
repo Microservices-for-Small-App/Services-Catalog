@@ -22,10 +22,9 @@ public class ItemsController : ControllerBase
 
     // GET /items/{id}
     [HttpGet("{id}")]
-    public ItemDto GetById(Guid id)
+    public ActionResult<ItemDto> GetById(Guid id)
     {
-        var item = items.Where(item => item.Id == id).SingleOrDefault();
-        return item;
+        return items.Where(item => item.Id == id).SingleOrDefault() is ItemDto item ? Ok(item) : NotFound();
     }
 
     // POST /items
