@@ -22,4 +22,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", () => "Please use /swagger to see the API documentation.");
+
 app.Run();
