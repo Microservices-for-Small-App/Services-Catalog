@@ -43,11 +43,11 @@ public class ItemsController : ControllerBase
     {
         var existingItem = items.Where(item => item.Id == id).SingleOrDefault();
 
-        if(existingItem is null)
+        if (existingItem is null)
         {
             return NotFound();
         }
-        
+
         var updatedItem = existingItem with
         {
             Name = updateItemDto.Name,
@@ -66,6 +66,12 @@ public class ItemsController : ControllerBase
     public IActionResult Delete(Guid id)
     {
         var index = items.FindIndex(existingItem => existingItem.Id == id);
+
+        if (index < 0)
+        {
+            return NotFound();
+        }
+
         items.RemoveAt(index);
 
         return NoContent();
