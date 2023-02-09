@@ -1,4 +1,4 @@
-using Catalog.API.Dtos;
+using Catalog.Data.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers;
