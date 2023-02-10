@@ -1,8 +1,7 @@
 ﻿using Catalog.Data.Dtos;
 using Catalog.Data.Entities;
 
-namespace Catalog.API.Extensions;
-
+namespace Catalog.Data.Extensions;
 
 public static class ItemDtoExtensions
 {
