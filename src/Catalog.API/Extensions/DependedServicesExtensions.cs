@@ -17,17 +17,16 @@ public static class DependedServicesExtensions
         BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
         BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
 
-        var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
-
-        var mongoDbSettings = configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
-
-        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection("MongoDbCollectionSettings"));
-
         _ = services.AddSingleton(serviceProvider =>
         {
+            var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
+            var mongoDbSettings = configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
+
             return new MongoClient(mongoDbSettings?.ConnectionString)
                 .GetDatabase(serviceSettings?.ServiceName);
         });
+
+        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection("MongoDbCollectionSettings"));
 
         _ = services.AddSingleton<IItemsRepository, ItemsRepository>();
 
