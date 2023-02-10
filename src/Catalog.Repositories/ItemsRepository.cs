@@ -1,6 +1,7 @@
 ﻿using Catalog.ApplicationCore.Interfaces;
 using Catalog.ApplicationCore.Settings;
 using Catalog.Data.Entities;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace Catalog.Repositories;
@@ -10,9 +11,9 @@ public class ItemsRepository : IItemsRepository
     private readonly IMongoCollection<Item> _mongoDbCollection;
     private readonly FilterDefinitionBuilder<Item> _filterBuilder = Builders<Item>.Filter;
 
-    public ItemsRepository(IMongoDatabase database, MongoDbCollectionSettings mongoDbCollectionSettings)
+    public ItemsRepository(IMongoDatabase database, IOptions<MongoDbCollectionSettings> mongoDbCollectionSettings)
     {
-        _mongoDbCollection = database.GetCollection<Item>(mongoDbCollectionSettings.Name);
+        _mongoDbCollection = database.GetCollection<Item>(mongoDbCollectionSettings.Value.Name);
     }
 
     public async Task<IReadOnlyCollection<Item>> GetAllAsync()

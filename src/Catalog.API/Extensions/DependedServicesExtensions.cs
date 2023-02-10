@@ -21,13 +21,13 @@ public static class DependedServicesExtensions
 
         var mongoDbSettings = configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
 
+        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection("MongoDbCollectionSettings"));
+
         _ = services.AddSingleton(serviceProvider =>
         {
             return new MongoClient(mongoDbSettings?.ConnectionString)
                 .GetDatabase(serviceSettings?.ServiceName);
         });
-
-        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection("MongoDbCollectionSettings"));
 
         _ = services.AddSingleton<IItemsRepository, ItemsRepository>();
 
