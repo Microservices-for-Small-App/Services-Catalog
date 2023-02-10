@@ -1,15 +1,13 @@
 ﻿using Catalog.Data.Dtos;
 using Catalog.Data.Entities;
 
-namespace Catalog.API.Extensions
+namespace Catalog.API.Extensions;
+
+
+public static class ItemDtoExtensions
 {
-
-    public static class ItemDtoExtensions
+    public static ItemDto AsDto(this Item item)
     {
-        public static ItemDto AsDto(this Item item)
-        {
-            return new ItemDto(item.Id, item.Name, item.Description, item.Price, item.CreatedDate);
-        }
+        return new ItemDto(item.Id, item.Name, item.Description, item.Price, item.CreatedDate);
     }
-
 }
