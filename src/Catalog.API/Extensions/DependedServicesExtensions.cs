@@ -1,5 +1,6 @@
-﻿using Catalog.ApplicationCore.Settings;
-using Microsoft.Extensions.Configuration;
+﻿using Catalog.ApplicationCore.Interfaces;
+using Catalog.ApplicationCore.Settings;
+using Catalog.Repositories;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -25,6 +26,8 @@ public static class DependedServicesExtensions
             return new MongoClient(mongoDbSettings?.ConnectionString)
                 .GetDatabase(serviceSettings?.ServiceName);
         });
+
+        _ = services.AddSingleton<IItemsRepository, ItemsRepository>();
 
         _ = services.AddControllers(options =>
         {
