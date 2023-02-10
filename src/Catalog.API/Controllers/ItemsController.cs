@@ -1,4 +1,6 @@
+using Catalog.API.Extensions;
 using Catalog.Data.Dtos;
+using Catalog.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers;
@@ -7,16 +9,13 @@ namespace Catalog.API.Controllers;
 [Route("items")]
 public class ItemsController : ControllerBase
 {
-    private static readonly List<ItemDto> items = new()
-        {
-            new ItemDto(Guid.NewGuid(), "Potion", "Restores a small amount of HP", 5, DateTimeOffset.UtcNow),
-            new ItemDto(Guid.NewGuid(), "Antidote", "Cures poison", 7, DateTimeOffset.UtcNow),
-            new ItemDto(Guid.NewGuid(), "Bronze sword", "Deals a small amount of damage", 20, DateTimeOffset.UtcNow)
-        };
+    private readonly ItemsRepository itemsRepository = new();
 
     [HttpGet]
-    public IEnumerable<ItemDto> Get()
+    public async Task<IEnumerable<ItemDto>> Get()
     {
+        var items = (await itemsRepository.GetAllAsync())
+                        .Select(item => item.AsDto());
         return items;
     }
 
