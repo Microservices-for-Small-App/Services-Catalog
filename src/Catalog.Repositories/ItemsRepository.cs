@@ -1,9 +1,10 @@
-﻿using Catalog.Data.Entities;
+﻿using Catalog.ApplicationCore.Interfaces;
+using Catalog.Data.Entities;
 using MongoDB.Driver;
 
 namespace Catalog.Repositories;
 
-public class ItemsRepository
+public class ItemsRepository : IItemsRepository
 {
     private const string collectionName = "items";
     private readonly IMongoCollection<Item> dbCollection;
