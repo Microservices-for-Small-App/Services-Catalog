@@ -27,6 +27,8 @@ public static class DependedServicesExtensions
                 .GetDatabase(serviceSettings?.ServiceName);
         });
 
+        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection("MongoDbCollectionSettings"));
+
         _ = services.AddSingleton<IItemsRepository, ItemsRepository>();
 
         _ = services.AddControllers(options =>
@@ -49,5 +51,5 @@ public static class DependedServicesExtensions
 }
 
 //builder.Services.Configure<ServiceSettings>(builder.Configuration.GetSection("ServiceSettings"));
-//builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
+
 
