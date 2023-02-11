@@ -27,6 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Repositories", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.ApplicationCore", "src\Catalog.ApplicationCore\Catalog.ApplicationCore.csproj", "{A769270F-B873-48E1-8D63-42F71060C5F5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postmancollections", "postmancollections", "{386FAB91-252E-4E9C-B87F-008629AB4145}"
+	ProjectSection(SolutionItems) = preProject
+		postmancollections\Small-Microservices-App.postman_collection.json = postmancollections\Small-Microservices-App.postman_collection.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
