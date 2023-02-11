@@ -13,6 +13,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{FB7A1124-95F3-4CC5-924F-A29401D36AB4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{0484EC89-080D-4292-823C-8A1FBC71A069}"
+	ProjectSection(SolutionItems) = preProject
+		documentation\images\DockerVolumesPath.PNG = documentation\images\DockerVolumesPath.PNG
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{893D6FCF-F16F-47C0-9F7E-BD4D5073B043}"
 EndProject
@@ -22,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Data", "src\Catalog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Repositories", "src\Catalog.Repositories\Catalog.Repositories.csproj", "{EC411E7D-C8D0-421B-B9D4-01C9D205163B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.ApplicationCore", "src\Catalog.ApplicationCore\Catalog.ApplicationCore.csproj", "{A769270F-B873-48E1-8D63-42F71060C5F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.ApplicationCore", "src\Catalog.ApplicationCore\Catalog.ApplicationCore.csproj", "{A769270F-B873-48E1-8D63-42F71060C5F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
