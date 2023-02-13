@@ -1,5 +1,4 @@
 ﻿using Catalog.ApplicationCore.Settings;
-using Catalog.Repositories;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
