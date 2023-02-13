@@ -1,3 +1,4 @@
+using Catalog.ApplicationCore.Interfaces;
 using Catalog.Data.Dtos;
 using Catalog.Data.Entities;
 using Catalog.Data.Extensions;
@@ -9,9 +10,9 @@ namespace Catalog.API.Controllers;
 [Route("items")]
 public class ItemsController : ControllerBase
 {
-    private readonly IItemsRepository _itemsRepository;
+    private readonly IRepository<Item> _itemsRepository;
 
-    public ItemsController(IItemsRepository itemsRepository)
+    public ItemsController(IRepository<Item> itemsRepository)
     {
         _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
     }
