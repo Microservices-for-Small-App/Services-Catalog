@@ -1,5 +1,4 @@
-﻿using Catalog.ApplicationCore.Interfaces;
-using Catalog.ApplicationCore.Settings;
+﻿using Catalog.ApplicationCore.Settings;
 using Catalog.Repositories;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;

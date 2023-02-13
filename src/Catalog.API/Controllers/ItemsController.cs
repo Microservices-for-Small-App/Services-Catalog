@@ -1,4 +1,3 @@
-using Catalog.ApplicationCore.Interfaces;
 using Catalog.Data.Dtos;
 using Catalog.Data.Entities;
 using Catalog.Data.Extensions;

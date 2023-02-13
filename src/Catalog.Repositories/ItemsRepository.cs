@@ -1,5 +1,4 @@
-﻿using Catalog.ApplicationCore.Interfaces;
-using Catalog.ApplicationCore.Settings;
+﻿using Catalog.ApplicationCore.Settings;
 using Catalog.Data.Entities;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
