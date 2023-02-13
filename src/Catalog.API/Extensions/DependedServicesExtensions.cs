@@ -8,7 +8,6 @@ using MongoDB.Driver;
 
 namespace Catalog.API.Extensions;
 
-
 public static class DependedServicesExtensions
 {
 
