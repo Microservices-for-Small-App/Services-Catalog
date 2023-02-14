@@ -17,7 +17,7 @@ public static class IServiceCollectionExtensions
         BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
         BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
 
-        services.AddSingleton(serviceProvider =>
+        _ = services.AddSingleton(serviceProvider =>
         {
             var configuration = serviceProvider.GetService<IConfiguration>();
 
@@ -32,14 +32,15 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddMongoRepository<T>(this IServiceCollection services, string collectionName)
+    public static IServiceCollection AddMongoRepository<T>(this IServiceCollection services)
         where T : IEntity
     {
-        services.AddSingleton<IRepository<T>>(serviceProvider =>
+        _ = services.AddSingleton<IRepository<T>>(serviceProvider =>
         {
             var database = serviceProvider.GetService<IMongoDatabase>();
+            var MongoDbCollectionSettings = serviceProvider.GetService<MongoDbCollectionSettings>();
 
-            return new MongoRepository<T>(database!, collectionName);
+            return new MongoRepository<T>(database!, MongoDbCollectionSettings?.Name!);
         });
 
         return services;

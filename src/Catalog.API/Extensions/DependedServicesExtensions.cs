@@ -1,6 +1,7 @@
 ﻿using Catalog.ApplicationCore.Settings;
 using Catalog.Data.Entities;
 using Catalog.Repositories.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Catalog.API.Extensions;
 
@@ -9,11 +10,13 @@ public static class DependedServicesExtensions
 
     public static IServiceCollection ConfigureDependedServices(this IServiceCollection services, IConfiguration configuration)
     {
+        _ = services.AddSingleton(configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!);
 
-        var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
-        var mongoDbCollectionSettings = configuration.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>();
+        _ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!);
 
-        services.AddMongo().AddMongoRepository<Item>(mongoDbCollectionSettings?.Name!);
+        _ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!);
+
+        _ = services.AddMongo().AddMongoRepository<Item>();
 
         _ = services.AddControllers(options =>
         {
