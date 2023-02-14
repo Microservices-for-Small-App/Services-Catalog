@@ -1,5 +1,6 @@
 ﻿using Catalog.ApplicationCore.Interfaces;
 using Catalog.ApplicationCore.Settings;
+using Catalog.Data.Entities;
 using Catalog.Repositories;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -7,7 +8,6 @@ using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
 namespace Catalog.API.Extensions;
-
 
 public static class DependedServicesExtensions
 {
@@ -26,9 +26,14 @@ public static class DependedServicesExtensions
                 .GetDatabase(serviceSettings?.ServiceName);
         });
 
-        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection("MongoDbCollectionSettings"));
+        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection(nameof(MongoDbCollectionSettings)));
 
-        _ = services.AddSingleton<IItemsRepository, ItemsRepository>();
+        _ = services.AddSingleton<IRepository<Item>>(serviceProvider =>
+        {
+            var mongoDbCollectionSettings = configuration.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>();
+
+            return new MongoRepository<Item>(serviceProvider?.GetService<IMongoDatabase>()!, mongoDbCollectionSettings?.Name!);
+        });
 
         _ = services.AddControllers(options =>
         {
