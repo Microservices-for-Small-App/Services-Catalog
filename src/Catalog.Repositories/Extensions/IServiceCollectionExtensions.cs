@@ -1,7 +1,6 @@
 ﻿using Catalog.ApplicationCore.Interfaces;
 using Catalog.ApplicationCore.Settings;
 using Catalog.Data.Entities;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -19,14 +18,8 @@ public static class IServiceCollectionExtensions
 
         _ = services.AddSingleton(serviceProvider =>
         {
-            var configuration = serviceProvider.GetService<IConfiguration>();
-
-            var serviceSettings = configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
-            var mongoDbSettings = configuration?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
-
-            var mongoClient = new MongoClient(mongoDbSettings?.ConnectionString);
-
-            return mongoClient.GetDatabase(serviceSettings?.ServiceName);
+            return new MongoClient(serviceProvider.GetService<MongoDbSettings>()?.ConnectionString)
+                        .GetDatabase(serviceProvider.GetService<ServiceSettings>()?.ServiceName);
         });
 
         return services;
@@ -37,10 +30,8 @@ public static class IServiceCollectionExtensions
     {
         _ = services.AddSingleton<IRepository<T>>(serviceProvider =>
         {
-            var database = serviceProvider.GetService<IMongoDatabase>();
-            var MongoDbCollectionSettings = serviceProvider.GetService<MongoDbCollectionSettings>();
-
-            return new MongoRepository<T>(database!, MongoDbCollectionSettings?.Name!);
+            return new MongoRepository<T>(serviceProvider.GetService<IMongoDatabase>()!,
+                                            serviceProvider.GetService<MongoDbCollectionSettings>()?.Name!);
         });
 
         return services;

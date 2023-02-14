@@ -1,20 +1,31 @@
 ﻿using Catalog.ApplicationCore.Settings;
 using Catalog.Data.Entities;
 using Catalog.Repositories.Extensions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Catalog.API.Extensions;
 
 public static class DependedServicesExtensions
 {
 
-    public static IServiceCollection ConfigureDependedServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureDependedServices(this IServiceCollection services)
     {
-        _ = services.AddSingleton(configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!);
+        _ = services.AddSingleton(serviceProvider =>
+        {
+            return serviceProvider.GetService<IConfiguration>()
+                    ?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!;
+        });
 
-        _ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!);
+        _ = services.AddSingleton(serviceProvider =>
+        {
+            return serviceProvider.GetService<IConfiguration>()
+                    ?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!;
+        });
 
-        _ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!);
+        _ = services.AddSingleton(serviceProvider =>
+        {
+            return serviceProvider.GetService<IConfiguration>()
+                    ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
+        });
 
         _ = services.AddMongo().AddMongoRepository<Item>();
 
@@ -38,5 +49,8 @@ public static class DependedServicesExtensions
 }
 
 //builder.Services.Configure<ServiceSettings>(builder.Configuration.GetSection("ServiceSettings"));
+//_ = services.AddSingleton(configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!);
+//_ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!);
+//_ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!);
 
 
