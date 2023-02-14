@@ -1,11 +1,6 @@
-﻿using Catalog.ApplicationCore.Interfaces;
-using Catalog.ApplicationCore.Settings;
+﻿using Catalog.ApplicationCore.Settings;
 using Catalog.Data.Entities;
-using Catalog.Repositories;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Driver;
+using Catalog.Repositories.Extensions;
 
 namespace Catalog.API.Extensions;
 
@@ -14,26 +9,11 @@ public static class DependedServicesExtensions
 
     public static IServiceCollection ConfigureDependedServices(this IServiceCollection services, IConfiguration configuration)
     {
-        BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
-        BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
 
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
-            var mongoDbSettings = configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
+        var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
+        var mongoDbCollectionSettings = configuration.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>();
 
-            return new MongoClient(mongoDbSettings?.ConnectionString)
-                .GetDatabase(serviceSettings?.ServiceName);
-        });
-
-        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection(nameof(MongoDbCollectionSettings)));
-
-        _ = services.AddSingleton<IRepository<Item>>(serviceProvider =>
-        {
-            var mongoDbCollectionSettings = configuration.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>();
-
-            return new MongoRepository<Item>(serviceProvider?.GetService<IMongoDatabase>()!, mongoDbCollectionSettings?.Name!);
-        });
+        services.AddMongo().AddMongoRepository<Item>(mongoDbCollectionSettings?.Name!);
 
         _ = services.AddControllers(options =>
         {
