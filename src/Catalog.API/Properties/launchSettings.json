@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "services-catalog": {
+    "Services-Catalog": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
