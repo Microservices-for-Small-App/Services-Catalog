@@ -1,39 +1,33 @@
-﻿using Catalog.ApplicationCore.Interfaces;
-using Catalog.ApplicationCore.Settings;
+﻿using Catalog.ApplicationCore.Settings;
 using Catalog.Data.Entities;
-using Catalog.Repositories;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Driver;
+using Catalog.Repositories.Extensions;
 
 namespace Catalog.API.Extensions;
 
 public static class DependedServicesExtensions
 {
 
-    public static IServiceCollection ConfigureDependedServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureDependedServices(this IServiceCollection services)
     {
-        BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
-        BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
+        _ = services.AddSingleton(serviceProvider =>
+        {
+            return serviceProvider.GetService<IConfiguration>()
+                    ?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!;
+        });
 
         _ = services.AddSingleton(serviceProvider =>
         {
-            var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
-            var mongoDbSettings = configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
-
-            return new MongoClient(mongoDbSettings?.ConnectionString)
-                .GetDatabase(serviceSettings?.ServiceName);
+            return serviceProvider.GetService<IConfiguration>()
+                    ?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!;
         });
 
-        _ = services.Configure<MongoDbCollectionSettings>(configuration.GetSection(nameof(MongoDbCollectionSettings)));
-
-        _ = services.AddSingleton<IRepository<Item>>(serviceProvider =>
+        _ = services.AddSingleton(serviceProvider =>
         {
-            var mongoDbCollectionSettings = configuration.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>();
-
-            return new MongoRepository<Item>(serviceProvider?.GetService<IMongoDatabase>()!, mongoDbCollectionSettings?.Name!);
+            return serviceProvider.GetService<IConfiguration>()
+                    ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
         });
+
+        _ = services.AddMongo().AddMongoRepository<Item>();
 
         _ = services.AddControllers(options =>
         {
@@ -55,5 +49,8 @@ public static class DependedServicesExtensions
 }
 
 //builder.Services.Configure<ServiceSettings>(builder.Configuration.GetSection("ServiceSettings"));
+//_ = services.AddSingleton(configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!);
+//_ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!);
+//_ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!);
 
 
