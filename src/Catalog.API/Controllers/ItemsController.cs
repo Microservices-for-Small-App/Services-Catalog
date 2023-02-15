@@ -1,7 +1,7 @@
-using Catalog.ApplicationCore.Interfaces;
 using Catalog.Data.Dtos;
 using Catalog.Data.Entities;
 using Catalog.Data.Extensions;
+using CommonLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers;
