@@ -1,4 +1,6 @@
-﻿namespace Catalog.Data.Entities;
+﻿using CommonLibrary.Entities;
+
+namespace Catalog.Data.Entities;
 
 public class Item : IEntity
 {
