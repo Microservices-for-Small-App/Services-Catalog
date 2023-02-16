@@ -1,6 +1,6 @@
-﻿using Catalog.ApplicationCore.Settings;
-using Catalog.Data.Entities;
-using Catalog.Repositories.Extensions;
+﻿using Catalog.Data.Entities;
+using CommonLibrary.MongoDB.Extensions;
+using CommonLibrary.Settings;
 
 namespace Catalog.API.Extensions;
 
