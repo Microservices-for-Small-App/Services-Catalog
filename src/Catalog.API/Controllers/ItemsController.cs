@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Catalog.API.Controllers;
 
 [ApiController]
-[Route("items")]
+[Route("api/items")]
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<Item> _itemsRepository;
