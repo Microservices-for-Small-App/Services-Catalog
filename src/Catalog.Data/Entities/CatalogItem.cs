@@ -2,7 +2,7 @@
 
 namespace Catalog.Data.Entities;
 
-public class Item : IEntity
+public class CatalogItem : IEntity
 {
     public Guid Id { get; set; }
 
