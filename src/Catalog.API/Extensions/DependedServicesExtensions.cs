@@ -27,7 +27,7 @@ public static class DependedServicesExtensions
                     ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
         });
 
-        _ = services.AddMongo().AddMongoRepository<Item>();
+        _ = services.AddMongo().AddMongoRepository<CatalogItem>();
 
         _ = services.AddControllers(options =>
         {

@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace Catalog.API.Controllers;
 
 [ApiController]
-[Route("items")]
+[Route("api/items")]
 public class ItemsController : ControllerBase
 {
-    private readonly IRepository<Item> _itemsRepository;
+    private readonly IRepository<CatalogItem> _itemsRepository;
 
-    public ItemsController(IRepository<Item> itemsRepository)
+    public ItemsController(IRepository<CatalogItem> itemsRepository)
     {
         _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
     }
@@ -43,7 +43,7 @@ public class ItemsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ItemDto>> PostAsync(CreateItemDto createItemDto)
     {
-        var item = new Item
+        var item = new CatalogItem
         {
             Name = createItemDto.Name,
             Description = createItemDto.Description,
