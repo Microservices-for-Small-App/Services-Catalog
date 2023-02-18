@@ -18,7 +18,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<ItemDto>> Get()
+    public async Task<IEnumerable<CatalogItemDto>> Get()
     {
         var items = (await _itemsRepository.GetAllAsync())
                         .Select(item => item.AsDto());
@@ -27,7 +27,7 @@ public class ItemsController : ControllerBase
 
     // GET /items/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<ItemDto>> GetByIdAsync(Guid id)
+    public async Task<ActionResult<CatalogItemDto>> GetByIdAsync(Guid id)
     {
         var item = await _itemsRepository.GetAsync(id);
 
@@ -41,7 +41,7 @@ public class ItemsController : ControllerBase
 
     // POST /items
     [HttpPost]
-    public async Task<ActionResult<ItemDto>> PostAsync(CreateItemDto createItemDto)
+    public async Task<ActionResult<CatalogItemDto>> PostAsync(CreateCatalogItemDto createItemDto)
     {
         var item = new CatalogItem
         {
@@ -58,7 +58,7 @@ public class ItemsController : ControllerBase
 
     // PUT /items/{id}
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutAsync(Guid id, UpdateItemDto updateItemDto)
+    public async Task<IActionResult> PutAsync(Guid id, UpdateCatalogItemDto updateItemDto)
     {
         var existingItem = await _itemsRepository.GetAsync(id);
 
