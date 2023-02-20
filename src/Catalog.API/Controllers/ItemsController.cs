@@ -51,12 +51,12 @@ public class ItemsController : ControllerBase
     {
         var item = await _itemsRepository.GetAsync(id);
 
-        if (item == null)
+        if (item is null)
         {
             return NotFound();
         }
 
-        return item.AsDto();
+        return Ok(item.AsDto());
     }
 
     // POST /items
@@ -82,7 +82,7 @@ public class ItemsController : ControllerBase
     {
         var existingItem = await _itemsRepository.GetAsync(id);
 
-        if (existingItem == null)
+        if (existingItem is null)
         {
             return NotFound();
         }
@@ -102,7 +102,7 @@ public class ItemsController : ControllerBase
     {
         var item = await _itemsRepository.GetAsync(id);
 
-        if (item == null)
+        if (item is null)
         {
             return NotFound();
         }
