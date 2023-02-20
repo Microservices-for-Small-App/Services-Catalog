@@ -11,6 +11,7 @@ namespace Catalog.API.Controllers;
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<CatalogItem> _itemsRepository;
+    private static int requestCounter = 0;
 
     public ItemsController(IRepository<CatalogItem> itemsRepository)
     {
@@ -18,11 +19,28 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<CatalogItemDto>> Get()
+    public async Task<ActionResult<IReadOnlyCollection<CatalogItemDto>>> GetAsync()
     {
+        requestCounter++;
+        Console.WriteLine($"Request {requestCounter}: Starting...");
+
+        if (requestCounter <= 2)
+        {
+            Console.WriteLine($"Request {requestCounter}: Delaying...");
+            await Task.Delay(TimeSpan.FromSeconds(10));
+        }
+
+        if (requestCounter <= 4)
+        {
+            Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error).");
+            return StatusCode(500);
+        }
+
         var items = (await _itemsRepository.GetAllAsync())
                         .Select(item => item.AsDto());
-        return items;
+
+        Console.WriteLine($"Request {requestCounter}: 200 (OK).");
+        return Ok(items);
     }
 
     // GET /items/{id}
