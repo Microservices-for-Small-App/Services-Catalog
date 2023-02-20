@@ -21,6 +21,7 @@ public class ItemsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IReadOnlyCollection<CatalogItemDto>>> GetAsync()
     {
+        // TODO: Remove this code. This is used only to simulate issue
         requestCounter++;
         Console.WriteLine($"Request {requestCounter}: Starting...");
 
@@ -35,6 +36,7 @@ public class ItemsController : ControllerBase
             Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error).");
             return StatusCode(500);
         }
+        // TODO: Remove this code. This is used only to simulate issue
 
         var items = (await _itemsRepository.GetAllAsync())
                         .Select(item => item.AsDto());
