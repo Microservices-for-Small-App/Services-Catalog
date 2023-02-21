@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postmancollections", "postm
 		postmancollections\Small-Microservices-App.postman_collection.json = postmancollections\Small-Microservices-App.postman_collection.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Contracts", "src\Catalog.Contracts\Catalog.Contracts.csproj", "{81E6FA4D-7BA0-4FC1-B4CC-5EE948C75126}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{5F186D2F-6C51-4680-A3C5-7EB2082ECA88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F186D2F-6C51-4680-A3C5-7EB2082ECA88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F186D2F-6C51-4680-A3C5-7EB2082ECA88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81E6FA4D-7BA0-4FC1-B4CC-5EE948C75126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81E6FA4D-7BA0-4FC1-B4CC-5EE948C75126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81E6FA4D-7BA0-4FC1-B4CC-5EE948C75126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81E6FA4D-7BA0-4FC1-B4CC-5EE948C75126}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{0484EC89-080D-4292-823C-8A1FBC71A069} = {FB7A1124-95F3-4CC5-924F-A29401D36AB4}
 		{F7582C6C-0DE7-413F-A965-0515352D8945} = {893D6FCF-F16F-47C0-9F7E-BD4D5073B043}
 		{5F186D2F-6C51-4680-A3C5-7EB2082ECA88} = {893D6FCF-F16F-47C0-9F7E-BD4D5073B043}
+		{81E6FA4D-7BA0-4FC1-B4CC-5EE948C75126} = {893D6FCF-F16F-47C0-9F7E-BD4D5073B043}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F95ECE77-9ADE-4A17-A72E-DF8F93D20F62}
