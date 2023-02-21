@@ -11,6 +11,7 @@ namespace Catalog.API.Controllers;
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<CatalogItem> _itemsRepository;
+    private static int requestCounter = 0;
 
     public ItemsController(IRepository<CatalogItem> itemsRepository)
     {
@@ -18,11 +19,30 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<CatalogItemDto>> Get()
+    public async Task<ActionResult<IReadOnlyCollection<CatalogItemDto>>> GetAsync()
     {
+        // TODO: Remove this code. This is used only to simulate issue
+        requestCounter++;
+        Console.WriteLine($"Request {requestCounter}: Starting...");
+
+        if (requestCounter <= 2)
+        {
+            Console.WriteLine($"Request {requestCounter}: Delaying...");
+            await Task.Delay(TimeSpan.FromSeconds(10));
+        }
+
+        if (requestCounter <= 4)
+        {
+            Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error).");
+            return StatusCode(500);
+        }
+        // TODO: Remove this code. This is used only to simulate issue
+
         var items = (await _itemsRepository.GetAllAsync())
                         .Select(item => item.AsDto());
-        return items;
+
+        Console.WriteLine($"Request {requestCounter}: 200 (OK).");
+        return Ok(items);
     }
 
     // GET /items/{id}
@@ -31,12 +51,12 @@ public class ItemsController : ControllerBase
     {
         var item = await _itemsRepository.GetAsync(id);
 
-        if (item == null)
+        if (item is null)
         {
             return NotFound();
         }
 
-        return item.AsDto();
+        return Ok(item.AsDto());
     }
 
     // POST /items
@@ -62,7 +82,7 @@ public class ItemsController : ControllerBase
     {
         var existingItem = await _itemsRepository.GetAsync(id);
 
-        if (existingItem == null)
+        if (existingItem is null)
         {
             return NotFound();
         }
@@ -82,7 +102,7 @@ public class ItemsController : ControllerBase
     {
         var item = await _itemsRepository.GetAsync(id);
 
-        if (item == null)
+        if (item is null)
         {
             return NotFound();
         }
