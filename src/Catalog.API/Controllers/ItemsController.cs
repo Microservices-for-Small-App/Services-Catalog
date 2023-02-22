@@ -30,7 +30,6 @@ public class ItemsController : ControllerBase
         return Ok(items);
     }
 
-    // GET /items/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<CatalogItemDto>> GetByIdAsync(Guid id)
     {
@@ -44,7 +43,6 @@ public class ItemsController : ControllerBase
         return Ok(item.AsDto());
     }
 
-    // POST /items
     [HttpPost]
     public async Task<ActionResult<CatalogItemDto>> PostAsync(CreateCatalogItemDto createItemDto)
     {
@@ -62,7 +60,6 @@ public class ItemsController : ControllerBase
         return CreatedAtAction(nameof(GetByIdAsync), new { id = item.Id }, item);
     }
 
-    // PUT /items/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAsync(Guid id, UpdateCatalogItemDto updateItemDto)
     {
@@ -84,7 +81,6 @@ public class ItemsController : ControllerBase
         return NoContent();
     }
 
-    // DELETE /items/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
