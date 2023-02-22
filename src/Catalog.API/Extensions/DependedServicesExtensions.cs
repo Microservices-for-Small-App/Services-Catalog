@@ -47,8 +47,7 @@ public static class DependedServicesExtensions
             {
                 configurator.Host(rabbitMQSettings.Host);
 
-                configurator.ConfigureEndpoints(context,
-                    new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
+                configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
             });
         });
 
