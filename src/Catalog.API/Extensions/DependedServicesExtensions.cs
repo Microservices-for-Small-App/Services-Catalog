@@ -1,6 +1,9 @@
-﻿using Catalog.Data.Entities;
+﻿using Catalog.API.Settings;
+using Catalog.Data.Entities;
 using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
+using MassTransit;
+using MassTransit.Definition;
 
 namespace Catalog.API.Extensions;
 
@@ -9,9 +12,12 @@ public static class DependedServicesExtensions
 
     public static IServiceCollection ConfigureDependedServices(this IServiceCollection services)
     {
+        RabbitMQSettings rabbitMQSettings = new();
+        ServiceSettings serviceSettings = new();
+
         _ = services.AddSingleton(serviceProvider =>
         {
-            return serviceProvider.GetService<IConfiguration>()
+            return serviceSettings = serviceProvider.GetService<IConfiguration>()
                     ?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!;
         });
 
@@ -23,11 +29,30 @@ public static class DependedServicesExtensions
 
         _ = services.AddSingleton(serviceProvider =>
         {
+            return rabbitMQSettings = serviceProvider.GetService<IConfiguration>()
+                    ?.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>()!;
+        });
+
+        _ = services.AddSingleton(serviceProvider =>
+        {
             return serviceProvider.GetService<IConfiguration>()
                     ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
         });
 
         _ = services.AddMongo().AddMongoRepository<CatalogItem>();
+
+        _ = services.AddMassTransit(x =>
+        {
+            x.UsingRabbitMq((context, configurator) =>
+            {
+                configurator.Host(rabbitMQSettings.Host);
+
+                configurator.ConfigureEndpoints(context,
+                    new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
+            });
+        });
+
+        _ = services.AddMassTransitHostedService();
 
         _ = services.AddControllers(options =>
         {
