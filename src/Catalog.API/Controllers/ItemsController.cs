@@ -21,27 +21,8 @@ public class ItemsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IReadOnlyCollection<CatalogItemDto>>> GetAsync()
     {
-        // TODO: Remove this code. This is used only to simulate issue
-        requestCounter++;
-        Console.WriteLine($"Request {requestCounter}: Starting...");
+        var items = (await _itemsRepository.GetAllAsync()).Select(item => item.AsDto());
 
-        if (requestCounter <= 2)
-        {
-            Console.WriteLine($"Request {requestCounter}: Delaying...");
-            await Task.Delay(TimeSpan.FromSeconds(10));
-        }
-
-        if (requestCounter <= 4)
-        {
-            Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error).");
-            return StatusCode(500);
-        }
-        // TODO: Remove this code. This is used only to simulate issue
-
-        var items = (await _itemsRepository.GetAllAsync())
-                        .Select(item => item.AsDto());
-
-        Console.WriteLine($"Request {requestCounter}: 200 (OK).");
         return Ok(items);
     }
 
@@ -113,3 +94,22 @@ public class ItemsController : ControllerBase
     }
 
 }
+
+// TODO: Remove this code. This is used only to simulate issue
+//requestCounter++;
+//        Console.WriteLine($"Request {requestCounter}: Starting...");
+
+//        if (requestCounter <= 2)
+//        {
+//            Console.WriteLine($"Request {requestCounter}: Delaying...");
+//            await Task.Delay(TimeSpan.FromSeconds(10));
+//        }
+
+//        if (requestCounter <= 4)
+//{
+//    Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error).");
+//    return StatusCode(500);
+//}
+// TODO: Remove this code. This is used only to simulate issue
+
+// Console.WriteLine($"Request {requestCounter}: 200 (OK).");
