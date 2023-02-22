@@ -1,7 +1,9 @@
+using Catalog.Contracts;
 using Catalog.Data.Dtos;
 using Catalog.Data.Entities;
 using Catalog.Data.Extensions;
 using CommonLibrary.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers;
@@ -11,11 +13,13 @@ namespace Catalog.API.Controllers;
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<CatalogItem> _itemsRepository;
-    private static int requestCounter = 0;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public ItemsController(IRepository<CatalogItem> itemsRepository)
+    public ItemsController(IRepository<CatalogItem> itemsRepository, IPublishEndpoint publishEndpoint)
     {
         _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
+
+        _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
     }
 
     [HttpGet]
@@ -51,8 +55,9 @@ public class ItemsController : ControllerBase
             Price = createItemDto.Price,
             CreatedDate = DateTimeOffset.UtcNow
         };
-
         await _itemsRepository.CreateAsync(item);
+
+        await _publishEndpoint.Publish(new CatalogItemCreated(item.Id, item.Name, item.Description));
 
         return CreatedAtAction(nameof(GetByIdAsync), new { id = item.Id }, item);
     }
@@ -74,6 +79,8 @@ public class ItemsController : ControllerBase
 
         await _itemsRepository.UpdateAsync(existingItem);
 
+        await _publishEndpoint.Publish(new CatalogItemUpdated(existingItem.Id, existingItem.Name, existingItem.Description));
+
         return NoContent();
     }
 
@@ -90,12 +97,16 @@ public class ItemsController : ControllerBase
 
         await _itemsRepository.RemoveAsync(item.Id);
 
+        await _publishEndpoint.Publish(new CatalogItemDeleted(id));
+
         return NoContent();
     }
 
 }
 
 // TODO: Remove this code. This is used only to simulate issue
+// private static int requestCounter = 0;
+
 //requestCounter++;
 //        Console.WriteLine($"Request {requestCounter}: Starting...");
 
@@ -110,6 +121,7 @@ public class ItemsController : ControllerBase
 //    Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error).");
 //    return StatusCode(500);
 //}
-// TODO: Remove this code. This is used only to simulate issue
 
 // Console.WriteLine($"Request {requestCounter}: 200 (OK).");
+// TODO: Remove this code. This is used only to simulate issue
+
