@@ -1,7 +1,9 @@
+using Catalog.Contracts;
 using Catalog.Data.Dtos;
 using Catalog.Data.Entities;
 using Catalog.Data.Extensions;
 using CommonLibrary.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers;
@@ -11,41 +13,23 @@ namespace Catalog.API.Controllers;
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<CatalogItem> _itemsRepository;
-    private static int requestCounter = 0;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public ItemsController(IRepository<CatalogItem> itemsRepository)
+    public ItemsController(IRepository<CatalogItem> itemsRepository, IPublishEndpoint publishEndpoint)
     {
         _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
+
+        _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
     }
 
     [HttpGet]
     public async Task<ActionResult<IReadOnlyCollection<CatalogItemDto>>> GetAsync()
     {
-        // TODO: Remove this code. This is used only to simulate issue
-        requestCounter++;
-        Console.WriteLine($"Request {requestCounter}: Starting...");
+        var items = (await _itemsRepository.GetAllAsync()).Select(item => item.AsDto());
 
-        if (requestCounter <= 2)
-        {
-            Console.WriteLine($"Request {requestCounter}: Delaying...");
-            await Task.Delay(TimeSpan.FromSeconds(10));
-        }
-
-        if (requestCounter <= 4)
-        {
-            Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error).");
-            return StatusCode(500);
-        }
-        // TODO: Remove this code. This is used only to simulate issue
-
-        var items = (await _itemsRepository.GetAllAsync())
-                        .Select(item => item.AsDto());
-
-        Console.WriteLine($"Request {requestCounter}: 200 (OK).");
         return Ok(items);
     }
 
-    // GET /items/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<CatalogItemDto>> GetByIdAsync(Guid id)
     {
@@ -59,7 +43,6 @@ public class ItemsController : ControllerBase
         return Ok(item.AsDto());
     }
 
-    // POST /items
     [HttpPost]
     public async Task<ActionResult<CatalogItemDto>> PostAsync(CreateCatalogItemDto createItemDto)
     {
@@ -70,13 +53,13 @@ public class ItemsController : ControllerBase
             Price = createItemDto.Price,
             CreatedDate = DateTimeOffset.UtcNow
         };
-
         await _itemsRepository.CreateAsync(item);
+
+        await _publishEndpoint.Publish(new CatalogItemCreated(item.Id, item.Name, item.Description));
 
         return CreatedAtAction(nameof(GetByIdAsync), new { id = item.Id }, item);
     }
 
-    // PUT /items/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAsync(Guid id, UpdateCatalogItemDto updateItemDto)
     {
@@ -93,10 +76,11 @@ public class ItemsController : ControllerBase
 
         await _itemsRepository.UpdateAsync(existingItem);
 
+        await _publishEndpoint.Publish(new CatalogItemUpdated(existingItem.Id, existingItem.Name, existingItem.Description));
+
         return NoContent();
     }
 
-    // DELETE /items/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
@@ -109,7 +93,31 @@ public class ItemsController : ControllerBase
 
         await _itemsRepository.RemoveAsync(item.Id);
 
+        await _publishEndpoint.Publish(new CatalogItemDeleted(id));
+
         return NoContent();
     }
 
 }
+
+// TODO: Remove this code. This is used only to simulate issue
+// private static int requestCounter = 0;
+
+//requestCounter++;
+//        Console.WriteLine($"Request {requestCounter}: Starting...");
+
+//        if (requestCounter <= 2)
+//        {
+//            Console.WriteLine($"Request {requestCounter}: Delaying...");
+//            await Task.Delay(TimeSpan.FromSeconds(10));
+//        }
+
+//        if (requestCounter <= 4)
+//{
+//    Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error).");
+//    return StatusCode(500);
+//}
+
+// Console.WriteLine($"Request {requestCounter}: 200 (OK).");
+// TODO: Remove this code. This is used only to simulate issue
+
