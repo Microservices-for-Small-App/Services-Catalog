@@ -1,9 +1,9 @@
-﻿using Catalog.API.Settings;
-using Catalog.Data.Entities;
+﻿using Catalog.Data.Entities;
 using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
 using MassTransit;
 using MassTransit.Definition;
+using Play.Common.MassTransit;
 
 namespace Catalog.API.Extensions;
 
@@ -39,19 +39,21 @@ public static class DependedServicesExtensions
                     ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
         });
 
-        _ = services.AddMongo().AddMongoRepository<CatalogItem>();
+        _ = services.AddMongo()
+            .AddMongoRepository<CatalogItem>()
+            .AddMassTransitWithRabbitMq();
 
-        _ = services.AddMassTransit(x =>
-        {
-            x.UsingRabbitMq((context, configurator) =>
-            {
-                configurator.Host(rabbitMQSettings.Host);
+        //_ = services.AddMassTransit(x =>
+        //{
+        //    x.UsingRabbitMq((context, configurator) =>
+        //    {
+        //        configurator.Host(rabbitMQSettings.Host);
 
-                configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
-            });
-        });
+        //        configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
+        //    });
+        //});
 
-        _ = services.AddMassTransitHostedService();
+        //_ = services.AddMassTransitHostedService();
 
         _ = services.AddControllers(options =>
         {
