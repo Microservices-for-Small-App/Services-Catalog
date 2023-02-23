@@ -10,12 +10,9 @@ public static class DependedServicesExtensions
 
     public static IServiceCollection ConfigureDependedServices(this IServiceCollection services)
     {
-        RabbitMQSettings rabbitMQSettings = new();
-        ServiceSettings serviceSettings = new();
-
         _ = services.AddSingleton(serviceProvider =>
         {
-            return serviceSettings = serviceProvider.GetService<IConfiguration>()
+            return serviceProvider.GetService<IConfiguration>()
                     ?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!;
         });
 
@@ -27,7 +24,7 @@ public static class DependedServicesExtensions
 
         _ = services.AddSingleton(serviceProvider =>
         {
-            return rabbitMQSettings = serviceProvider.GetService<IConfiguration>()
+            return serviceProvider.GetService<IConfiguration>()
                     ?.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>()!;
         });
 
