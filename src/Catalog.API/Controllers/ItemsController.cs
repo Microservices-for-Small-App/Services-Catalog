@@ -12,12 +12,12 @@ namespace Catalog.API.Controllers;
 [Route("api/items")]
 public class ItemsController : ControllerBase
 {
-    private readonly IRepository<CatalogItem> _itemsRepository;
+    private readonly IRepository<CatalogItem> _catalogitemsRepository;
     private readonly IPublishEndpoint _publishEndpoint;
 
-    public ItemsController(IRepository<CatalogItem> itemsRepository, IPublishEndpoint publishEndpoint)
+    public ItemsController(IRepository<CatalogItem> catalogitemsRepository, IPublishEndpoint publishEndpoint)
     {
-        _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
+        _catalogitemsRepository = catalogitemsRepository ?? throw new ArgumentNullException(nameof(catalogitemsRepository));
 
         _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
     }
@@ -25,7 +25,7 @@ public class ItemsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IReadOnlyCollection<CatalogItemDto>>> GetAsync()
     {
-        var items = (await _itemsRepository.GetAllAsync()).Select(item => item.AsDto());
+        var items = (await _catalogitemsRepository.GetAllAsync()).Select(item => item.AsDto());
 
         return Ok(items);
     }
@@ -33,7 +33,7 @@ public class ItemsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CatalogItemDto>> GetByIdAsync(Guid id)
     {
-        var item = await _itemsRepository.GetAsync(id);
+        var item = await _catalogitemsRepository.GetAsync(id);
 
         if (item is null)
         {
@@ -53,7 +53,7 @@ public class ItemsController : ControllerBase
             Price = createItemDto.Price,
             CreatedDate = DateTimeOffset.UtcNow
         };
-        await _itemsRepository.CreateAsync(item);
+        await _catalogitemsRepository.CreateAsync(item);
 
         await _publishEndpoint.Publish(new CatalogItemCreated(item.Id, item.Name, item.Description));
 
@@ -63,7 +63,7 @@ public class ItemsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAsync(Guid id, UpdateCatalogItemDto updateItemDto)
     {
-        var existingItem = await _itemsRepository.GetAsync(id);
+        var existingItem = await _catalogitemsRepository.GetAsync(id);
 
         if (existingItem is null)
         {
@@ -74,7 +74,7 @@ public class ItemsController : ControllerBase
         existingItem.Description = updateItemDto.Description;
         existingItem.Price = updateItemDto.Price;
 
-        await _itemsRepository.UpdateAsync(existingItem);
+        await _catalogitemsRepository.UpdateAsync(existingItem);
 
         await _publishEndpoint.Publish(new CatalogItemUpdated(existingItem.Id, existingItem.Name, existingItem.Description));
 
@@ -84,14 +84,14 @@ public class ItemsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        var item = await _itemsRepository.GetAsync(id);
+        var item = await _catalogitemsRepository.GetAsync(id);
 
         if (item is null)
         {
             return NotFound();
         }
 
-        await _itemsRepository.RemoveAsync(item.Id);
+        await _catalogitemsRepository.RemoveAsync(item.Id);
 
         await _publishEndpoint.Publish(new CatalogItemDeleted(id));
 
