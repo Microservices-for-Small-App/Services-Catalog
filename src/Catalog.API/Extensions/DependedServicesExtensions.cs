@@ -35,7 +35,7 @@ public static class DependedServicesExtensions
         });
 
         _ = services.AddMongo()
-            .AddMongoRepository<CatalogItem>()
+            .AddMongoRepository<CatalogItem>("catalogitems")
             .AddMassTransitWithRabbitMq();
 
         _ = services.AddControllers(options =>
