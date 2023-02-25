@@ -8,34 +8,18 @@ namespace Catalog.API.Extensions;
 public static class DependedServicesExtensions
 {
 
-    public static IServiceCollection ConfigureDependedServices(this IServiceCollection services)
+    public static IServiceCollection ConfigureDependedServices(this IServiceCollection services, IConfiguration configuration)
     {
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()
-                    ?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!;
-        });
+        _ = services.AddSingleton(() => { return configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!; });
 
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()
-                    ?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!;
-        });
+        _ = services.AddSingleton(() => { return configuration?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!; });
 
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()
-                    ?.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>()!;
-        });
+        _ = services.AddSingleton(() => { return configuration?.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>()!; });
 
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()
-                    ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
-        });
+        var mongoDbCollectionSettings = configuration?.GetSection(nameof(MongoDbCollectionSettings))?.Get<MongoDbCollectionSettings>()!;
 
         _ = services.AddMongo()
-            .AddMongoRepository<CatalogItem>("catalogitems")
+            .AddMongoRepository<CatalogItem>(mongoDbCollectionSettings.Name)
             .AddMassTransitWithRabbitMq();
 
         _ = services.AddControllers(options =>
@@ -49,7 +33,8 @@ public static class DependedServicesExtensions
 
         _ = services.AddCors(options =>
         {
-            options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            options.AddPolicy("AllowAll", policy => policy.WithOrigins(configuration?["AllowedOrigin"]!)
+                                                            .AllowAnyHeader().AllowAnyMethod());
         });
 
         return services;
