@@ -9,6 +9,8 @@ public static class HttpRequestPipelineExtensions
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            app.UseCors("AllowAll");
         }
 
         app.UseHttpsRedirection();
