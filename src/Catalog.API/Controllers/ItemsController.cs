@@ -4,12 +4,14 @@ using Catalog.Data.Entities;
 using Catalog.Data.Extensions;
 using CommonLibrary.Interfaces;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers;
 
 [ApiController]
 [Route("api/items")]
+[Authorize]
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<CatalogItem> _catalogitemsRepository;
