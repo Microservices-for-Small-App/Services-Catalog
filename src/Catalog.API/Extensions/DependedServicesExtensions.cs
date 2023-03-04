@@ -1,8 +1,8 @@
 ﻿using Catalog.Data.Entities;
+using CommonLibrary.Identity;
+using CommonLibrary.MassTransit;
 using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Play.Common.MassTransit;
 
 namespace Catalog.API.Extensions;
 
@@ -30,14 +30,8 @@ public static class DependedServicesExtensions
 
         _ = services.AddMongo()
             .AddMongoRepository<CatalogItem>(mongoDbCollectionSettings.Name)
-        .AddMassTransitWithRabbitMq();
-
-        _ = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = "https://localhost:5003";
-                    options.Audience = configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()?.ServiceName;
-                });
+            .AddMassTransitWithRabbitMq()
+            .AddJwtBearerAuthentication();
 
         _ = services.AddControllers(options =>
         {
