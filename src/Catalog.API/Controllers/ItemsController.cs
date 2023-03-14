@@ -11,9 +11,11 @@ namespace Catalog.API.Controllers;
 
 [ApiController]
 [Route("api/items")]
-[Authorize]
+[Authorize(Roles = AdminRole)]
 public class ItemsController : ControllerBase
 {
+    private const string AdminRole = "Admin";
+
     private readonly IRepository<CatalogItem> _catalogitemsRepository;
     private readonly IPublishEndpoint _publishEndpoint;
 
