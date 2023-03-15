@@ -1,6 +1,6 @@
 ﻿namespace Catalog.API.Configuration;
 
-public class IdentityPolicies
+public class AuthorizePolicies
 {
     public const string Read = "read_access";
 

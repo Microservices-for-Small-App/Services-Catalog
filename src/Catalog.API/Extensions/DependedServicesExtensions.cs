@@ -36,13 +36,13 @@ public static class DependedServicesExtensions
 
         _ = services.AddAuthorization(options =>
         {
-            options.AddPolicy(IdentityPolicies.Read, policy =>
+            options.AddPolicy(AuthorizePolicies.Read, policy =>
             {
                 policy.RequireRole("Admin");
                 policy.RequireClaim("scope", "catalog.readaccess", "catalog.fullaccess");
             });
 
-            options.AddPolicy(IdentityPolicies.Write, policy =>
+            options.AddPolicy(AuthorizePolicies.Write, policy =>
             {
                 policy.RequireRole("Admin");
                 policy.RequireClaim("scope", "catalog.writeaccess", "catalog.fullaccess");
