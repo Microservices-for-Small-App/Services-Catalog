@@ -1,4 +1,5 @@
-﻿using Catalog.Data.Entities;
+﻿using Catalog.API.Configuration;
+using Catalog.Data.Entities;
 using CommonLibrary.Identity;
 using CommonLibrary.MassTransit;
 using CommonLibrary.MongoDB.Extensions;
@@ -32,6 +33,21 @@ public static class DependedServicesExtensions
             .AddMongoRepository<CatalogItem>(mongoDbCollectionSettings.Name)
             .AddMassTransitWithRabbitMq()
             .AddJwtBearerAuthentication();
+
+        _ = services.AddAuthorization(options =>
+        {
+            options.AddPolicy(IdentityPolicies.Read, policy =>
+            {
+                policy.RequireRole("Admin");
+                policy.RequireClaim("scope", "catalog.readaccess", "catalog.fullaccess");
+            });
+
+            options.AddPolicy(IdentityPolicies.Write, policy =>
+            {
+                policy.RequireRole("Admin");
+                policy.RequireClaim("scope", "catalog.writeaccess", "catalog.fullaccess");
+            });
+        });
 
         _ = services.AddControllers(options =>
         {
