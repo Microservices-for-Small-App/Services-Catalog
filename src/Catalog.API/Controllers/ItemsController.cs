@@ -1,3 +1,4 @@
+using Catalog.API.Configuration;
 using Catalog.Contracts;
 using Catalog.Data.Dtos;
 using Catalog.Data.Entities;
@@ -11,7 +12,7 @@ namespace Catalog.API.Controllers;
 
 [ApiController]
 [Route("api/items")]
-[Authorize(Roles = AdminRole)]
+// [Authorize(Roles = AdminRole)]
 public class ItemsController : ControllerBase
 {
     private const string AdminRole = "Admin";
@@ -27,6 +28,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthorizePolicies.Read)]
     public async Task<ActionResult<IReadOnlyCollection<CatalogItemDto>>> GetAsync()
     {
         var items = (await _catalogitemsRepository.GetAllAsync()).Select(item => item.AsDto());
@@ -35,6 +37,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(AuthorizePolicies.Read)]
     public async Task<ActionResult<CatalogItemDto>> GetByIdAsync(Guid id)
     {
         var item = await _catalogitemsRepository.GetAsync(id);
@@ -48,6 +51,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthorizePolicies.Write)]
     public async Task<ActionResult<CatalogItemDto>> PostAsync(CreateCatalogItemDto createItemDto)
     {
         var item = new CatalogItem
@@ -65,6 +69,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AuthorizePolicies.Write)]
     public async Task<IActionResult> PutAsync(Guid id, UpdateCatalogItemDto updateItemDto)
     {
         var existingItem = await _catalogitemsRepository.GetAsync(id);
@@ -86,6 +91,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthorizePolicies.Write)]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
         var item = await _catalogitemsRepository.GetAsync(id);
