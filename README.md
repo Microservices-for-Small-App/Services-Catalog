@@ -6,6 +6,8 @@
 
 ```dotnetcli
 dotnet new webapi -n Catalog.API
+
+dotnet pack -o C:\LordKrishna\Packages\
 ```
 
 ## Docker Commands
