@@ -6,6 +6,10 @@
 
 ```dotnetcli
 dotnet new webapi -n Catalog.API
+
+dotnet pack -o C:\LordKrishna\Packages\
+
+jdbc:sqlserver://YourServer.database.windows.net:1433;database=YourDataBase;user=YourUser@YourServer.database.windows.net;password=Sample@123$;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
 ```
 
 ## Docker Commands
