@@ -12,20 +12,11 @@ public static class DependedServicesExtensions
 
     public static IServiceCollection ConfigureDependedServices(this IServiceCollection services, IConfiguration configuration)
     {
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!;
-        });
+        _ = services.AddSingleton(configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!);
 
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!;
-        });
+        _ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!);
 
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()?.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>()!;
-        });
+        _ = services.AddSingleton(configuration?.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>()!);
 
         var mongoDbCollectionSettings = configuration?.GetSection(nameof(MongoDbCollectionSettings))?.Get<MongoDbCollectionSettings>()!;
 
