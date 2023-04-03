@@ -7,6 +7,6 @@ public static class CatalogItemDtoExtensions
 {
     public static CatalogItemDto AsDto(this CatalogItem item)
     {
-        return new CatalogItemDto(item.Id, item.Name, item.Description, item.Price, item.CreatedDate);
+        return new CatalogItemDto(item.Id, item.Name!, item.Description!, item.Price, item.CreatedDate);
     }
 }
