@@ -16,6 +16,7 @@
     <PackageReleaseNotes>Initial version 1.1</PackageReleaseNotes>
     <AssemblyVersion>1.3</AssemblyVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/Microservices-for-Small-App/Services-Catalog</RepositoryUrl>
   </PropertyGroup>
 
 </Project>
