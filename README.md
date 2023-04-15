@@ -23,20 +23,3 @@ docker run -d --rm --name store-mongo -p 27017:27017 -v mongo-db-persistance-sto
 `\\wsl$\docker-desktop-data\data\docker\volumes`
 
 ![Docker Volumne Path](./documentation/images/DockerVolumesPath.PNG)
-
-## Create and publish package to GitHub using PowerShell
-
-```powershell
-$version="1.0.5"
-$owner="Microservices-for-Small-App"
-$username="vishipayyallore"
-$repo="Services-Catalog"
-$libname="Catalog.Contracts"
-$gh_pat="ghp_Your_GitHib_Classic_PAT"
-
-dotnet clean
-dotnet build -c Release
-dotnet pack --configuration Release -o C:\LordKrishna\SSP\Packages
-
-dotnet nuget push C:\LordKrishna\SSP\Packages\$libname.$version.nupkg --source "gHmicroservices" --api-key $gh_pat
-```
