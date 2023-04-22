@@ -21,7 +21,7 @@ public static class DependedServicesExtensions
         var mongoDbCollectionSettings = configuration?.GetSection(nameof(MongoDbCollectionSettings))?.Get<MongoDbCollectionSettings>()!;
 
         _ = services.AddMongo()
-            .AddMongoRepository<CatalogItem>(mongoDbCollectionSettings.Name)
+            .AddMongoRepository<CatalogItem>(mongoDbCollectionSettings.Name!)
             .AddMassTransitWithRabbitMq()
             .AddJwtBearerAuthentication();
 
