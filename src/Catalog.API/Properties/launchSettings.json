@@ -13,6 +13,8 @@
       "commandName": "Docker",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "MongoDbSettings__Host": "mongo",
+        "RabbitMQSettings__Host": "rabbitmq",
         "ServiceSettings__Authority": "http://localhost:5002"
       },
       "launchBrowser": true,
