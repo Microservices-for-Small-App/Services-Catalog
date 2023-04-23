@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MongoDbSettings__Host": "mongo",
         "RabbitMQSettings__Host": "rabbitmq",
-        "ServiceSettings__Authority": "http://localhost:5002"
+        "ServiceSettings__Authority": "https://localhost:5003"
       },
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
