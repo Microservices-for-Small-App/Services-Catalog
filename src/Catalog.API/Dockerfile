@@ -11,7 +11,7 @@ COPY ["src/Catalog.API/Catalog.API.csproj", "src/Catalog.API/"]
 COPY ["src/Catalog.Contracts/Catalog.Contracts.csproj", "src/Catalog.Contracts/"]
 COPY ["src/Catalog.Data/Catalog.Data.csproj", "src/Catalog.Data/"]
 RUN dotnet restore "src/Catalog.API/Catalog.API.csproj"
-COPY ./Src ./Src
+COPY ./src ./src
 WORKDIR "/src/src/Catalog.API"
 RUN dotnet build "Catalog.API.csproj" -c Release --no-restore -o /app/build
 
