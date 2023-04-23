@@ -11,14 +11,14 @@ USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Services-Catalog/src/Catalog.API/Catalog.API.csproj", "Services-Catalog/src/Catalog.API/"]
-RUN dotnet restore "Services-Catalog/src/Catalog.API/Catalog.API.csproj"
-COPY . .
-WORKDIR "/src/Services-Catalog/src/Catalog.API"
-RUN dotnet build "Catalog.API.csproj" -c Release -o /app/build
+COPY ["src/Catalog.API/Catalog.API.csproj", "src/Catalog.API/"]
+RUN dotnet restore "src/Catalog.API/Catalog.API.csproj"
+COPY ./src ./src
+WORKDIR "/src/Catalog.API"
+RUN dotnet build "Catalog.API.csproj" -c Release --no-restore -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Catalog.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Catalog.API.csproj" -c Release --no-restore -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
