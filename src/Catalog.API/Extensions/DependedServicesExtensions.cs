@@ -22,7 +22,7 @@ public static class DependedServicesExtensions
 
         _ = services.AddMongo()
             .AddMongoRepository<CatalogItem>(mongoDbCollectionSettings.Name!)
-            .AddMassTransitWithRabbitMq()
+            .AddMassTransitWithMessageBroker(configuration!)
             .AddJwtBearerAuthentication();
 
         _ = services.AddAuthorization(options =>
