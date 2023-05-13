@@ -21,7 +21,7 @@ public static class HttpRequestPipelineExtensions
 
         app.MapControllers();
 
-        app.MapGet("/", () => "Please use /swagger to see the API documentation.");
+        app.MapGet("/", () => "Please use /swagger to see the Catalog.API documentation.");
 
         return app;
     }
