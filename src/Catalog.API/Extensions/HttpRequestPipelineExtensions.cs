@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Extensions;
+﻿using CommonLibrary.HealthChecks;
+
+namespace Catalog.API.Extensions;
 
 public static class HttpRequestPipelineExtensions
 {
@@ -22,6 +24,8 @@ public static class HttpRequestPipelineExtensions
         app.MapControllers();
 
         app.MapGet("/", () => "Please use /swagger to see the Catalog.API documentation.");
+
+        app.MapPlayEconomyHealthChecks();
 
         return app;
     }
