@@ -15,7 +15,7 @@ spec:
       serviceAccountName: catalog-serviceaccount
       containers:
         - name: catalog
-          image: playeconomy.azurecr.io/play.catalog:1.0.4
+          image: acrplayeconomydev001.azurecr.io/ssp-catalogservice:latest
           env:
             - name: ServiceSettings__MessageBroker
               value: SERVICEBUS
